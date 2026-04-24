@@ -1,0 +1,55 @@
+fullnameOverride: pronunt-ai-service
+
+namespace:
+  create: false
+  name: prism
+
+image:
+  repository: ghcr.io/pronunt/pronunt-ai-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: pronunt-ai-service.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+env:
+  config:
+    APP_NAME: pronunt-ai-service
+    APP_ENV: production
+    APP_HOST: 0.0.0.0
+    APP_PORT: "8000"
+    LOG_LEVEL: INFO
+    OPENAI_MODEL: gpt-5-mini
+  secret:
+    OPENAI_API_KEY: change-me
+
