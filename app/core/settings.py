@@ -16,6 +16,8 @@ class Settings(BaseSettings):
 
     request_id_header: str = "X-Request-ID"
     http_timeout_seconds: float = 10.0
+    openai_model: str = "gpt-5-mini"
+    openai_api_key: str | None = None
 
     auth_enabled: bool = False
     allow_unsafe_dev_auth: bool = True
@@ -29,6 +31,8 @@ class Settings(BaseSettings):
 
         if self.http_timeout_seconds <= 0:
             errors.append("HTTP_TIMEOUT_SECONDS must be greater than 0.")
+        if not self.openai_model:
+            errors.append("OPENAI_MODEL is required.")
 
         if self.auth_enabled:
             if not self.keycloak_issuer:
