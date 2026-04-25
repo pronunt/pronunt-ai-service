@@ -1,4 +1,19 @@
+from enum import Enum
+
 from pydantic import BaseModel, Field
+
+
+class AiProvider(str, Enum):
+    inhouse = "inhouse"
+    openai = "openai"
+    fallback = "fallback"
+
+
+class AiProviderOverride(BaseModel):
+    provider: AiProvider
+    model: str | None = None
+    api_key: str | None = None
+    base_url: str | None = None
 
 
 class AiSummaryRequest(BaseModel):
@@ -16,6 +31,7 @@ class AiSummaryRequest(BaseModel):
     stale: bool
     impact_services: list[str] = Field(default_factory=list)
     labels: list[str] = Field(default_factory=list)
+    provider_override: AiProviderOverride | None = None
 
 
 class AiSummaryResponse(BaseModel):

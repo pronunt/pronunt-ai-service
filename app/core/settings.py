@@ -16,6 +16,10 @@ class Settings(BaseSettings):
 
     request_id_header: str = "X-Request-ID"
     http_timeout_seconds: float = 10.0
+    ai_default_provider: str = "inhouse"
+    inhouse_base_url: str = "http://ollama:11434"
+    inhouse_model: str = "llama3.1:8b"
+    openai_base_url: str | None = None
     openai_model: str = "gpt-5-mini"
     openai_api_key: str | None = None
 
@@ -31,6 +35,12 @@ class Settings(BaseSettings):
 
         if self.http_timeout_seconds <= 0:
             errors.append("HTTP_TIMEOUT_SECONDS must be greater than 0.")
+        if self.ai_default_provider not in {"inhouse", "openai", "fallback"}:
+            errors.append("AI_DEFAULT_PROVIDER must be one of inhouse, openai, or fallback.")
+        if not self.inhouse_base_url:
+            errors.append("INHOUSE_BASE_URL is required.")
+        if not self.inhouse_model:
+            errors.append("INHOUSE_MODEL is required.")
         if not self.openai_model:
             errors.append("OPENAI_MODEL is required.")
 
