@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     openai_base_url: str | None = None
     openai_model: str = "gpt-5-mini"
     openai_api_key: str | None = None
+    auth_service_url: str = "http://pronunt-auth-service:8000"
+    internal_service_token: str | None = None
 
     auth_enabled: bool = False
     allow_unsafe_dev_auth: bool = True
@@ -43,6 +45,8 @@ class Settings(BaseSettings):
             errors.append("INHOUSE_MODEL is required.")
         if not self.openai_model:
             errors.append("OPENAI_MODEL is required.")
+        if not self.auth_service_url:
+            errors.append("AUTH_SERVICE_URL is required.")
 
         if self.auth_enabled:
             if not self.keycloak_issuer:
